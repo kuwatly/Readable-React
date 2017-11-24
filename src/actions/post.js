@@ -1,10 +1,10 @@
 export const STATE_POSTS = 'posts';
-export const LOAD_POSTS = 'LOAD_POSTS'
-export const ADD_POST = 'ADD_POST'
-export const EDIT_POST = 'EDIT_POST'
-export const REMOVE_POST = 'REMOVE_POST'
-export const VOTE_UP_POST = 'VOTE_UP_POST'
-export const VOTE_DOWN_POST = 'VOTE_DOWN_POST'
+export const LOAD_POSTS = 'LOAD_POSTS';
+export const ADD_POST = 'ADD_POST';
+export const EDIT_POST = 'EDIT_POST';
+export const REMOVE_POST = 'REMOVE_POST';
+export const VOTE_UP_POST = 'VOTE_UP_POST';
+export const VOTE_DOWN_POST = 'VOTE_DOWN_POST';
 
 export function loadPosts({ posts }) {
   return {

@@ -1,8 +1,13 @@
 export const API = "http://localhost:3001";
-export const HEADERS = {
+
+let token = localStorage.token;
+if (!token)
+  token = localStorage.token = Math.random().toString(36).substr(-8);
+
+export const headers = {
   'Accept': 'application/json',
-  'Authorization': 'whatever-you-want',
-  'Content-Type': 'application/json'
+  'Authorization': token
 };
+
 export const UP_VOTE_OPTION = "upVote";
 export const DOWN_VOTE_OPTION = "downVote";

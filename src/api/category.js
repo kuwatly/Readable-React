@@ -1,7 +1,6 @@
-import { API, HEADERS } from 'readableAPI'
+import { API, headers } from './readableAPI'
 
-export const getCategories = () => {
-  fetch(`${API}/categories/`, { HEADERS })
+export const getCategories = () =>
+  fetch(`${API}/categories`, { headers })
     .then(res => res.json())
-    .then(data => data.categories)
-};
+    .then(data => data.categories);

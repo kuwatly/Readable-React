@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import category from './category';
+import categories from './categories';
 import comment from './comment';
 import post from './post';
 
 export default combineReducers({
-  category,
+  categories,
   post,
   comment,
 });

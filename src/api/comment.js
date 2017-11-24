@@ -1,14 +1,14 @@
-import {API, HEADERS, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from 'readableAPI'
+import {API, headers, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from './readableAPI'
 import { v4 } from 'uuid';
 
 export const getCommentsForPost = (postId) =>
-  fetch(`${API}/comments/${postId}/comments`, {HEADERS})
+  fetch(`${API}/comments/${postId}/comments`, {headers})
     .then(res => res.json());
 
 export const addComment = (comment) =>
-  fetch(`${api}/comments/`, {
+  fetch(`${API}/comments/`, {
     method: 'POST',
-    headers: HEADERS,
+    headers: headers,
     body: JSON.stringify({
       ...comment,
       id: v4(),
@@ -17,29 +17,29 @@ export const addComment = (comment) =>
   }).then(res => res.json());
 
 export const getCommentDetails = (id) =>
-  fetch(`${API}/comments/${id}`, {HEADERS})
+  fetch(`${API}/comments/${id}`, {headers})
     .then(res => res.json());
 
 export const editComment = (id, comment) =>
-  fetch(`${api}/comments/${id}`, {
+  fetch(`${API}/comments/${id}`, {
     method: 'PUT',
-    headers: HEADERS,
+    headers: headers,
     body: JSON.stringify({
       ...comment
     })
   }).then(res => res.json());
 
 export const deleteComment = (id) =>
-  fetch(`${api}/comments/${id}`, {
+  fetch(`${API}/comments/${id}`, {
     method: 'DELETE',
-    headers: HEADERS,
+    headers: headers,
   });
 
 const voteComment = (option) => (id) =>
-  fetch(`${api}/comments/${id}`,
+  fetch(`${API}/comments/${id}`,
     {
       method: 'POST',
-      headers: HEADERS,
+      headers: headers,
       body: JSON.stringify({option})
     })
     .then(res => res.json());
