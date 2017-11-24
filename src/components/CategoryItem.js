@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import OpenIcon from 'material-ui-icons/OpenInNew';
 import { Link } from 'react-router-dom';
+import Button from 'material-ui/Button';
+import Send from 'material-ui-icons/Send';
 
 const styles = {
   card: {
@@ -15,6 +15,9 @@ const styles = {
   media: {
     height: 50,
     width: 50,
+  },
+  rightIcon: {
+    marginLeft: 10,
   },
 };
 
@@ -35,11 +38,12 @@ class CategoryItem extends Component {
           <Typography type="subheading">{`/${path}`}</Typography>
         </CardContent>
         <CardActions>
-          <IconButton color='primary' aria-label="open">
-            <Link to={`/${path}`}>
-              <OpenIcon/>
-            </Link>
-          </IconButton>
+          <Link to={`/${path}`} style={{ textDecoration: 'none' }}>
+            <Button className={classes.button} raised color="primary">
+              {name}
+              <Send className={classes.rightIcon}/>
+            </Button>
+          </Link>
         </CardActions>
       </Card>
     );
