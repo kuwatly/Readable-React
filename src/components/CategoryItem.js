@@ -4,6 +4,8 @@ import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import OpenIcon from 'material-ui-icons/OpenInNew';
+import { Link } from 'react-router-dom';
 
 const styles = {
   card: {
@@ -33,7 +35,11 @@ class CategoryItem extends Component {
           <Typography type="subheading">{`/${path}`}</Typography>
         </CardContent>
         <CardActions>
-          <IconButton color='primary' aria-label="open" >{name}</IconButton>
+          <IconButton color='primary' aria-label="open">
+            <Link to={`/${path}`}>
+              <OpenIcon/>
+            </Link>
+          </IconButton>
         </CardActions>
       </Card>
     );
