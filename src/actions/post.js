@@ -1,4 +1,9 @@
-export const STATE_POSTS = 'posts';
+import {
+  apiAddPost,
+  apiEditPost,
+  apiDeletePost, apiGetPosts
+} from "../api/post";
+
 export const LOAD_POSTS = 'LOAD_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const EDIT_POST = 'EDIT_POST';
@@ -6,43 +11,37 @@ export const REMOVE_POST = 'REMOVE_POST';
 export const VOTE_UP_POST = 'VOTE_UP_POST';
 export const VOTE_DOWN_POST = 'VOTE_DOWN_POST';
 
-export function loadPosts({ posts }) {
-  return {
-    type: LOAD_POSTS,
-    posts,
-  }
-}
+export const loadPosts = () => dispatch => (
+  apiGetPosts()
+    .then(posts => dispatch({
+      type: LOAD_POSTS,
+      posts
+    }))
+);
 
-export function addPost ({ id, timestamp, title, body, author, category, voteScore, deleted }) {
-  return {
-    type: ADD_POST,
-    id,
-    timestamp,
-    title,
-    body,
-    author,
-    category,
-    voteScore,
-    deleted,
-  }
-}
+export const addPost = (post) => dispatch => (
+  apiAddPost(post)
+    .then(newPost => dispatch({
+      type: ADD_POST,
+      newPost
+    }))
+);
 
-export function editPost ({ id, title, body }) {
-  return {
-    type: EDIT_POST,
-    id,
-    title,
-    body,
-  }
-}
+export const editPost = ({id, title, body}) => dispatch => (
+  apiEditPost({id, title, body})
+    .then(post => dispatch({
+      type: EDIT_POST,
+      post
+    }))
+);
 
-export function removePost ({ id, deleted }) {
-  return {
-    type: REMOVE_POST,
-    id,
-    deleted,
-  }
-}
+export const removePost = (id) => dispatch => (
+  apiDeletePost(id)
+    .then(() => dispatch({
+      type: REMOVE_POST,
+      id
+    }))
+);
 
 export function voteUpPost ({ id, voteScore }) {
   return {

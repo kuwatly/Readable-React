@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import keycode from 'keycode';
+import { connect } from 'react-redux';
 import Table, {
   TableBody,
   TableCell,
@@ -21,6 +22,8 @@ import Tooltip from 'material-ui/Tooltip';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { timeConverter } from '../utils/utils'
+import PostAdd from './PostAdd';
+import { loadPosts } from '../actions/post'
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -31,7 +34,7 @@ const columnData = [
   { id: 'voteScore', numeric: true, disablePadding: false, label: 'Vote Score' },
 ];
 
-class EnhancedTableHead extends React.Component {
+class EnhancedTableHead extends Component {
   static propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
@@ -168,36 +171,10 @@ const styles = theme => ({
   },
 });
 
-class EnhancedTable extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      order: 'dec',
-      orderBy: 'voteScore',
-      selected: [],
-      data: [
-        {
-          "id": "8xf0y6ziyjabvozdd253nd",
-          "timestamp": 1467166872634,
-          "title": "Udacity is the best place to learn React",
-          "body": "Everyone says so after all.",
-          "author": "thingtwo",
-          "category": "react",
-          "voteScore": 6,
-        },
-        {
-          "id": "6ni6ok3ym7mf1p33lnez",
-          "timestamp": 1468479767190,
-          "title": "Learn Redux in 10 minutes!",
-          "body": "Just kidding. It takes more than 10 minutes to learn technology.",
-          "author": "thingone",
-          "category": "redux",
-          "voteScore": -5,
-        }
-      ].sort((a, b) => (a.voteScore < b.voteScore ? 1 : -1)),
-      page: 0,
-      rowsPerPage: 5,
-    };
+class PostList extends Component {
+  componentDidMount() {
+    const { loadPosts } = this.props;
+    loadPosts();
   }
 
   handleRequestSort = (event, property) => {
@@ -208,17 +185,17 @@ class EnhancedTable extends React.Component {
       order = 'asc';
     }
 
-    const data =
+    const posts =
       order === 'desc'
-        ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-        : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
+        ? this.state.posts.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
+        : this.state.posts.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
-    this.setState({ data, order, orderBy });
+    this.setState({ posts, order, orderBy });
   };
 
   handleSelectAllClick = (event, checked) => {
     if (checked) {
-      this.setState({ selected: this.state.data.map(n => n.id) });
+      this.setState({ selected: this.state.posts.map(n => n.id) });
       return;
     }
     this.setState({ selected: [] });
@@ -259,11 +236,11 @@ class EnhancedTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
+  isSelected = id => this.props.selected.indexOf(id) !== -1;
 
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { posts, order, orderBy, selected, rowsPerPage, page } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -276,10 +253,10 @@ class EnhancedTable extends React.Component {
               orderBy={orderBy}
               onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
+              rowCount={posts.length}
             />
             <TableBody>
-              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
+              {posts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                 const isSelected = this.isSelected(n.id);
                 return (
                   <TableRow
@@ -308,7 +285,7 @@ class EnhancedTable extends React.Component {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  count={data.length}
+                  count={posts.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onChangePage={this.handleChangePage}
@@ -317,14 +294,34 @@ class EnhancedTable extends React.Component {
               </TableRow>
             </TableFooter>
           </Table>
+          <PostAdd />
         </div>
       </Paper>
     );
   }
 }
 
-EnhancedTable.propTypes = {
+PostList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EnhancedTable);
+function mapStateToProps({posts}) {
+  return {
+    posts: posts.posts.sort((a, b) => (a.voteScore < b.voteScore ? 1 : -1)),
+    order: 'desc',
+    orderBy: 'voteScore',
+    selected: [],
+    page: 0,
+    rowsPerPage: 5,
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    loadPosts: () => dispatch(loadPosts()),
+  }
+}
+
+const styledPostList = withStyles(styles)(PostList);
+
+export default connect(mapStateToProps, mapDispatchToProps)(styledPostList);

@@ -1,15 +1,15 @@
 import {API, headers, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from './readableAPI'
 import { v4 } from 'uuid';
 
-export const getPostsForCategory = (categoryId) =>
+export const apiGetPostsForCategory = (categoryId) =>
   fetch(`${API}/${categoryId}/posts`, {headers})
     .then(res => res.json());
 
-export const getPosts = () =>
+export const apiGetPosts = () =>
   fetch(`${API}/posts`, {headers})
     .then(res => res.json());
 
-export const addPost = (post) =>
+export const apiAddPost = (post) =>
   fetch(`${API}/posts/`, {
     method: 'POST',
     headers: headers,
@@ -20,11 +20,11 @@ export const addPost = (post) =>
     })
   }).then(res => res.json());
 
-export const getPostDetails = (id) =>
+export const apiGetPostDetails = (id) =>
   fetch(`${API}/posts/${id}`, {headers})
     .then(res => res.json());
 
-export const editPost = (id, post) =>
+export const apiEditPost = (id, post) =>
   fetch(`${API}/posts/${id}`, {
     method: 'PUT',
     headers: headers,
@@ -33,7 +33,7 @@ export const editPost = (id, post) =>
     })
   }).then(res => res.json());
 
-export const deletePost = (id) =>
+export const apiDeletePost = (id) =>
   fetch(`${API}/posts/${id}`, {
     method: 'DELETE',
     headers: headers,
@@ -48,5 +48,5 @@ const votePost = (option) => (id) =>
     })
     .then(res => res.json());
 
-export const upVotePost = votePost(UP_VOTE_OPTION);
-export const downVotePost = votePost(DOWN_VOTE_OPTION);
+export const apiUpVotePost = votePost(UP_VOTE_OPTION);
+export const apiDownVotePost = votePost(DOWN_VOTE_OPTION);

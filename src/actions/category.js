@@ -1,10 +1,10 @@
-import { getCategories } from "../api/category";
+import { apiGetCategories } from "../api/category";
 
 export const STATE_CATEGORIES = 'categories';
 export const LOAD_CATEGORIES = 'LOAD_CATEGORIES'
 
 export const fetchCategories = (category) => dispatch => (
-  getCategories()
+  apiGetCategories()
     .then(categories => dispatch({
       type: LOAD_CATEGORIES,
       categories,

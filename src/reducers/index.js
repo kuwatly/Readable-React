@@ -2,10 +2,12 @@ import { combineReducers } from 'redux';
 
 import categories from './categories';
 import comment from './comment';
-import post from './post';
+import posts from './posts';
+import dialogs from './dialogs';
 
 export default combineReducers({
   categories,
-  post,
+  posts,
+  dialogs,
   comment,
 });

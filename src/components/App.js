@@ -3,6 +3,7 @@ import '../App.css';
 import CategoryList from "./CategoryList";
 import PostList from "./PostList";
 import { Route, withRouter } from 'react-router-dom';
+import Dialogs from "./Dialogs";
 
 class App extends Component {
   render() {
@@ -16,6 +17,7 @@ class App extends Component {
               <p className="App-intro">
                 Welcome to Readable
               </p>
+              <Dialogs />
               <CategoryList />
               <PostList />
             </div>

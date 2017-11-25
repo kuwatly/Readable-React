@@ -1,6 +1,6 @@
 import { API, headers } from './readableAPI'
 
-export const getCategories = () =>
+export const apiGetCategories = () =>
   fetch(`${API}/categories`, { headers })
     .then(res => res.json())
     .then(data => data.categories);

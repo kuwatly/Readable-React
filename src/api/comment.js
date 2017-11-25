@@ -1,11 +1,11 @@
 import {API, headers, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from './readableAPI'
 import { v4 } from 'uuid';
 
-export const getCommentsForPost = (postId) =>
+export const apiGetCommentsForPost = (postId) =>
   fetch(`${API}/comments/${postId}/comments`, {headers})
     .then(res => res.json());
 
-export const addComment = (comment) =>
+export const apiAddComment = (comment) =>
   fetch(`${API}/comments/`, {
     method: 'POST',
     headers: headers,
@@ -16,11 +16,11 @@ export const addComment = (comment) =>
     })
   }).then(res => res.json());
 
-export const getCommentDetails = (id) =>
+export const apiGetCommentDetails = (id) =>
   fetch(`${API}/comments/${id}`, {headers})
     .then(res => res.json());
 
-export const editComment = (id, comment) =>
+export const apiEditComment = (id, comment) =>
   fetch(`${API}/comments/${id}`, {
     method: 'PUT',
     headers: headers,
@@ -29,7 +29,7 @@ export const editComment = (id, comment) =>
     })
   }).then(res => res.json());
 
-export const deleteComment = (id) =>
+export const apiDeleteComment = (id) =>
   fetch(`${API}/comments/${id}`, {
     method: 'DELETE',
     headers: headers,
@@ -44,5 +44,5 @@ const voteComment = (option) => (id) =>
     })
     .then(res => res.json());
 
-export const upVoteComment = voteComment(UP_VOTE_OPTION);
-export const downVoteComment = voteComment(DOWN_VOTE_OPTION);
+export const apiUpVoteComment = voteComment(UP_VOTE_OPTION);
+export const apiDownVoteComment = voteComment(DOWN_VOTE_OPTION);
