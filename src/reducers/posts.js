@@ -46,7 +46,7 @@ function posts(state = initialPostsState, action) {
 }
 
 const initialPostsState = {
-  posts: []
+  posts: [],
 };
 
 export default posts;

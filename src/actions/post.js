@@ -10,6 +10,7 @@ export const EDIT_POST = 'EDIT_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const VOTE_UP_POST = 'VOTE_UP_POST';
 export const VOTE_DOWN_POST = 'VOTE_DOWN_POST';
+export const HANDLE_POST_TABLE_CHANGE = 'HANDLE_POST_TABLE_CHANGE';
 
 export const loadPosts = () => dispatch => (
   apiGetPosts()
@@ -58,3 +59,9 @@ export function voteDownPost ({ id, voteScore }) {
     voteScore,
   }
 }
+
+export const handlePostTableChange = ({source, value}) => ({
+  type: HANDLE_POST_TABLE_CHANGE,
+  source,
+  value
+});

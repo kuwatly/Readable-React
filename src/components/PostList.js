@@ -23,7 +23,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { timeConverter } from '../utils/utils'
 import PostAdd from './PostAdd';
-import { loadPosts } from '../actions/post'
+import { loadPosts, handlePostTableChange } from '../actions/post'
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -76,7 +76,7 @@ class EnhancedTableHead extends Component {
                   <TableSortLabel
                     active={orderBy === column.id}
                     direction={order}
-                    onClick={this.createSortHandler(column.id)}
+                    onClick={this.createSortHandler(column.id).bind(this)}
                   >
                     {column.label}
                   </TableSortLabel>
@@ -173,11 +173,11 @@ const styles = theme => ({
 
 class PostList extends Component {
   componentDidMount() {
-    const { loadPosts } = this.props;
-    loadPosts();
+    this.props.loadPosts();
   }
 
   handleRequestSort = (event, property) => {
+    const { handlePostTableChange } = this.props;
     const orderBy = property;
     let order = 'desc';
 
@@ -190,15 +190,18 @@ class PostList extends Component {
         ? this.props.posts.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
         : this.props.posts.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
-    this.setState({ posts, order, orderBy });
+    handlePostTableChange("posts", posts);
+    handlePostTableChange("order", order);
+    handlePostTableChange("orderBy", orderBy);
   };
 
   handleSelectAllClick = (event, checked) => {
+    const { handlePostTableChange } = this.props;
     if (checked) {
-      this.setState({ selected: this.props.posts.map(n => n.id) });
+      handlePostTableChange("selected", this.props.posts.map(n => n.id));
       return;
     }
-    this.setState({ selected: [] });
+    handlePostTableChange("selected", []);
   };
 
   handleKeyDown = (event, id) => {
@@ -208,7 +211,8 @@ class PostList extends Component {
   };
 
   handleClick = (event, id) => {
-    const { selected } = this.state;
+    const { handlePostTableChange } = this.props;
+    const { selected } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -225,18 +229,20 @@ class PostList extends Component {
       );
     }
 
-    this.setState({ selected: newSelected });
+    handlePostTableChange({selected, newSelected});
   };
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
+    const { handlePostTableChange } = this.props;
+    handlePostTableChange("page", page);
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
+    const { handlePostTableChange } = this.props;
+    handlePostTableChange("rowsPerPage", event.target.value);
   };
 
-  isSelected = id => this.props.selected.indexOf(id) !== -1;
+  isSelected = id => this.props.selected ? this.props.selected.indexOf(id) !== -1 : false;
 
   render() {
     const { classes } = this.props;
@@ -244,16 +250,16 @@ class PostList extends Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected ? selected.length : 0} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={posts.length}
+              numSelected={selected ? selected.length : 0}
+              order={order ? order : 'desc'}
+              orderBy={orderBy ? orderBy : 'voteScore'}
+              onSelectAllClick={this.handleSelectAllClick.bind(this)}
+              onRequestSort={this.handleRequestSort.bind(this)}
+              rowCount={posts ? posts.length : 0}
             />
             <TableBody>
               {posts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
@@ -285,11 +291,11 @@ class PostList extends Component {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  count={posts.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  count={posts ? posts.length : 0}
+                  rowsPerPage={rowsPerPage ? rowsPerPage : 0}
+                  page={page ? page : 0}
+                  onChangePage={this.handleChangePage.bind(this)}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
                 />
               </TableRow>
             </TableFooter>
@@ -305,19 +311,23 @@ PostList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-function mapStateToProps({posts}) {
+function mapStateToProps({
+                           posts: {posts},
+                           tables: {order, orderBy, selected, page, rowsPerPage},
+                         }) {
   return {
-    posts: posts.posts.sort((a, b) => (a.voteScore < b.voteScore ? 1 : -1)),
-    order: 'desc',
-    orderBy: 'voteScore',
-    selected: [],
-    page: 0,
-    rowsPerPage: 5,
+    posts: posts.sort((a, b) => (a.voteScore < b.voteScore ? 1 : -1)),
+    order: order,
+    orderBy: orderBy,
+    selected: selected,
+    page: page,
+    rowsPerPage: rowsPerPage,
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
+    handlePostTableChange: (source, value) => dispatch(handlePostTableChange({source, value})),
     loadPosts: () => dispatch(loadPosts()),
   }
 }
