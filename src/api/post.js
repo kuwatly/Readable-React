@@ -1,5 +1,5 @@
+import uuid from 'uuid';
 import {API, headers, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from './readableAPI'
-import { v4 } from 'uuid';
 
 export const apiGetPostsForCategory = (categoryId) =>
   fetch(`${API}/${categoryId}/posts`, {headers})
@@ -7,7 +7,8 @@ export const apiGetPostsForCategory = (categoryId) =>
 
 export const apiGetPosts = () =>
   fetch(`${API}/posts`, {headers})
-    .then(res => res.json());
+    .then(res => res.json())
+    .then(posts => posts.filter(post => !post.deleted));
 
 export const apiAddPost = (post) =>
   fetch(`${API}/posts/`, {
@@ -15,7 +16,7 @@ export const apiAddPost = (post) =>
     headers: headers,
     body: JSON.stringify({
       ...post,
-      id: v4(),
+      id: uuid(),
       timestamp: Date.now()
     })
   }).then(res => res.json());

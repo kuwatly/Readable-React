@@ -101,9 +101,7 @@ class PostDialog extends Component {
           <IconButton
             disabled={!okDisabled}
             onClick={() => {
-              isEdit ?
-                editPost(id, title, body):
-                addPost({title, body, category, author: owner})
+              isEdit ? editPost(id, title, body): addPost({title, body, category, author: owner})
             }}
             color={yesButtonColor}>
             <YesIcon />

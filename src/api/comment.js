@@ -1,5 +1,5 @@
 import {API, headers, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from './readableAPI'
-import { v4 } from 'uuid';
+import uuid from 'uuid';
 
 export const apiGetCommentsForPost = (postId) =>
   fetch(`${API}/comments/${postId}/comments`, {headers})
@@ -11,7 +11,7 @@ export const apiAddComment = (comment) =>
     headers: headers,
     body: JSON.stringify({
       ...comment,
-      id: v4(),
+      id: uuid(),
       timestamp: Date.now()
     })
   }).then(res => res.json());

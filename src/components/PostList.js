@@ -181,21 +181,21 @@ class PostList extends Component {
     const orderBy = property;
     let order = 'desc';
 
-    if (this.state.orderBy === property && this.state.order === 'desc') {
+    if (this.props.orderBy === property && this.props.order === 'desc') {
       order = 'asc';
     }
 
     const posts =
       order === 'desc'
-        ? this.state.posts.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-        : this.state.posts.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
+        ? this.props.posts.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
+        : this.props.posts.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
     this.setState({ posts, order, orderBy });
   };
 
   handleSelectAllClick = (event, checked) => {
     if (checked) {
-      this.setState({ selected: this.state.posts.map(n => n.id) });
+      this.setState({ selected: this.props.posts.map(n => n.id) });
       return;
     }
     this.setState({ selected: [] });
