@@ -76,7 +76,7 @@ class EnhancedTableHead extends Component {
                   <TableSortLabel
                     active={orderBy === column.id}
                     direction={order}
-                    onClick={this.createSortHandler(column.id).bind(this)}
+                    onClick={this.createSortHandler(column.id)}
                   >
                     {column.label}
                   </TableSortLabel>
@@ -211,8 +211,7 @@ class PostList extends Component {
   };
 
   handleClick = (event, id) => {
-    const { handlePostTableChange } = this.props;
-    const { selected } = this.props;
+    const { handlePostTableChange, selected } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -229,7 +228,7 @@ class PostList extends Component {
       );
     }
 
-    handlePostTableChange({selected, newSelected});
+    handlePostTableChange("selected", newSelected);
   };
 
   handleChangePage = (event, page) => {
@@ -242,7 +241,7 @@ class PostList extends Component {
     handlePostTableChange("rowsPerPage", event.target.value);
   };
 
-  isSelected = id => this.props.selected ? this.props.selected.indexOf(id) !== -1 : false;
+  isSelected = id => this.props.selected.indexOf(id) !== -1;
 
   render() {
     const { classes } = this.props;
@@ -257,8 +256,8 @@ class PostList extends Component {
               numSelected={selected ? selected.length : 0}
               order={order ? order : 'desc'}
               orderBy={orderBy ? orderBy : 'voteScore'}
-              onSelectAllClick={this.handleSelectAllClick.bind(this)}
-              onRequestSort={this.handleRequestSort.bind(this)}
+              onSelectAllClick={this.handleSelectAllClick}
+              onRequestSort={this.handleRequestSort}
               rowCount={posts ? posts.length : 0}
             />
             <TableBody>
@@ -294,8 +293,8 @@ class PostList extends Component {
                   count={posts ? posts.length : 0}
                   rowsPerPage={rowsPerPage ? rowsPerPage : 0}
                   page={page ? page : 0}
-                  onChangePage={this.handleChangePage.bind(this)}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 />
               </TableRow>
             </TableFooter>
