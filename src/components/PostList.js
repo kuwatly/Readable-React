@@ -25,8 +25,10 @@ import { timeConverter } from '../utils/utils';
 import PostAdd from './PostAdd';
 import {
   loadPosts, handlePostTableChange, removePost,
-  handlePostContentsChange, voteDownPost, voteUpPost
+  handlePostContentsChange, voteDownPost, voteUpPost,
+  fetchPostsByCategory,
 } from '../actions/post';
+import { fetchCategories } from '../actions/category';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
@@ -41,7 +43,7 @@ const columnData = [
   { id: 'commentCount', numeric: true, disablePadding: false, label: 'Comments' },
   { id: 'voteScore', numeric: true, disablePadding: false, label: 'Vote Score' },
   { id: 'vote', numeric: false, disablePadding: false, label: 'Vote' },
-  { id: 'actions', numeric: false, disablePadding: false, label: 'Actions' },
+  { id: 'actions', numeric: false, disablePadding: false, label: 'Action' },
 ];
 
 class EnhancedTableHead extends Component {
@@ -119,7 +121,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, selected, removePost, handlePostTableChange } = props;
+  const { numSelected, classes, selected, removePost, handlePostTableChange, tableTitle } = props;
 
   return (
     <Toolbar
@@ -131,7 +133,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Typography type="subheading">{numSelected} selected</Typography>
         ) : (
-          <Typography type="title">All Posts</Typography>
+          <Typography type="title">{tableTitle}</Typography>
         )}
       </div>
       <div className={classes.spacer} />
@@ -164,6 +166,7 @@ EnhancedTableToolbar.propTypes = {
   selected: PropTypes.array.isRequired,
   removePost: PropTypes.func.isRequired,
   handlePostTableChange: PropTypes.func.isRequired,
+  tableTitle: PropTypes.object.isRequired,
 };
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
@@ -186,7 +189,18 @@ const styles = theme => ({
 
 class PostList extends Component {
   componentDidMount() {
-    this.props.loadPosts();
+    const {
+      fetchPostsByCategory,
+      fetchCategories,
+      loadPosts,
+      currentCategory
+    } = this.props;
+    if (currentCategory) {
+      fetchCategories(currentCategory);
+      fetchPostsByCategory(currentCategory);
+    } else {
+      loadPosts();
+    }
   }
 
   handleRequestSort = (event, property) => {
@@ -260,13 +274,18 @@ class PostList extends Component {
     const { classes } = this.props;
     const { posts, order, orderBy, selected,
       rowsPerPage, page, removePost,
-      handlePostTableChange, voteUpPost, voteDownPost } = this.props;
+      handlePostTableChange, voteUpPost, voteDownPost, currentCategory } = this.props;
+    let tableTitle = "All Posts";
+    if (currentCategory) {
+      tableTitle = currentCategory.toUpperCase();
+    }
 
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected ? selected.length : 0}
                               selected={selected} removePost={removePost}
-                              handlePostTableChange ={handlePostTableChange}/>
+                              handlePostTableChange ={handlePostTableChange}
+                              tableTitle = {tableTitle}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <EnhancedTableHead
@@ -365,6 +384,8 @@ function mapDispatchToProps(dispatch) {
     removePost: (post) => dispatch(removePost(post)),
     voteDownPost : (post) => dispatch(voteDownPost(post)),
     voteUpPost: (post) => dispatch(voteUpPost(post)),
+    fetchCategories: (category) => dispatch(fetchCategories(category)),
+    fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category)),
   }
 }
 

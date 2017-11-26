@@ -23,7 +23,7 @@ const styles = {
 
 class CategoryItem extends Component {
   render() {
-    const {name, path} = this.props.category;
+    const {name, path, detailView} = this.props.category;
     const image = `../images/${name}.svg`;
     const classes = this.props.classes;
     return (
@@ -31,20 +31,21 @@ class CategoryItem extends Component {
         <CardMedia
           className={classes.media}
           image= {image}
-          title="React"
+          title={name}
         />
         <CardContent>
           <Typography type="display1">{name}</Typography>
-          <Typography type="subheading">{`/${path}`}</Typography>
         </CardContent>
-        <CardActions>
-          <Link to={`/${path}`} style={{ textDecoration: 'none' }}>
-            <Button className={classes.button} raised color="primary">
-              {name}
-              <Send className={classes.rightIcon}/>
-            </Button>
-          </Link>
-        </CardActions>
+        { !detailView && (
+            <CardActions>
+              <Link to={`/${path}`} style={{textDecoration: 'none'}}>
+                <Button className={classes.button} raised color="primary">
+                  {name}
+                  <Send className={classes.rightIcon}/>
+                </Button>
+              </Link>
+            </CardActions>
+          )}
       </Card>
     );
   }

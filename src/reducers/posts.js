@@ -6,6 +6,7 @@ import {
   VOTE_UP_POST,
   VOTE_DOWN_POST,
   HANDLE_POST_CONTENTS_CHANGE,
+  LOAD_POSTS_FOR_CATEGORY,
 } from '../actions/post'
 
 
@@ -47,6 +48,9 @@ function posts(state = initialPostsState, action) {
       };
 
     case HANDLE_POST_CONTENTS_CHANGE:
+      return {posts: action.posts};
+
+    case LOAD_POSTS_FOR_CATEGORY:
       return {posts: action.posts};
 
     default:

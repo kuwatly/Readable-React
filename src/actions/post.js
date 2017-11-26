@@ -5,6 +5,7 @@ import {
   apiGetPosts,
   apiUpVotePost,
   apiDownVotePost,
+  apiGetPostsForCategory,
 } from "../api/post";
 
 export const LOAD_POSTS = 'LOAD_POSTS';
@@ -15,6 +16,7 @@ export const VOTE_UP_POST = 'VOTE_UP_POST';
 export const VOTE_DOWN_POST = 'VOTE_DOWN_POST';
 export const HANDLE_POST_TABLE_CHANGE = 'HANDLE_POST_TABLE_CHANGE';
 export const HANDLE_POST_CONTENTS_CHANGE = 'HANDLE_POST_CONTENTS_CHANGE';
+export const LOAD_POSTS_FOR_CATEGORY = 'LOAD_POSTS_FOR_CATEGORY';
 
 export const loadPosts = () => dispatch => (
   apiGetPosts()
@@ -74,3 +76,12 @@ export const handlePostContentsChange = (posts) => ({
   type: HANDLE_POST_CONTENTS_CHANGE,
   posts
 });
+
+export const fetchPostsByCategory = (category) => dispatch => (
+  apiGetPostsForCategory(category)
+    .then(posts => dispatch({
+      type: LOAD_POSTS_FOR_CATEGORY,
+      category,
+      posts
+    }))
+);

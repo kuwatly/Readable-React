@@ -96,15 +96,15 @@ class PostDialog extends Component {
         <DialogActions>
           <IconButton onClick={() => onRequestClose()}
                       color="default">
-            <CancelIcon />
+            <CancelIcon/>
           </IconButton>
           <IconButton
             disabled={!okDisabled}
             onClick={() => {
-              isEdit ? editPost(id, title, body): addPost({title, body, category, author})
+              isEdit ? editPost(id, title, body) : addPost({title, body, category, author})
             }}
             color={yesButtonColor}>
-            <YesIcon />
+            <YesIcon/>
           </IconButton>
         </DialogActions>
       </Dialog>
