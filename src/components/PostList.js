@@ -138,7 +138,6 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            voteDownPost
             <IconButton aria-label="Delete" onClick={() => {
               selected.forEach(removePost);
               handlePostTableChange("numSelected", 0);
