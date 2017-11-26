@@ -23,7 +23,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { timeConverter } from '../utils/utils'
 import PostAdd from './PostAdd';
-import { loadPosts, handlePostTableChange } from '../actions/post'
+import { loadPosts, handlePostTableChange, removePost } from '../actions/post'
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -94,16 +94,9 @@ const toolbarStyles = theme => ({
   root: {
     paddingRight: 2,
   },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-        color: theme.palette.secondary.A700,
-        backgroundColor: theme.palette.secondary.A100,
-      }
-      : {
-        color: theme.palette.secondary.A100,
-        backgroundColor: theme.palette.secondary.A700,
-      },
+  highlight: {
+    backgroundColor: '#BBDEFB',
+  },
   spacer: {
     flex: '1 1 100%',
   },
@@ -116,7 +109,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+  const { numSelected, classes, selected, removePost, handlePostTableChange } = props;
 
   return (
     <Toolbar
@@ -135,7 +128,11 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
+            <IconButton aria-label="Delete" onClick={() => {
+              selected.forEach(removePost);
+              handlePostTableChange("numSelected", 0);
+              handlePostTableChange("selected", []);
+            }}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -154,13 +151,16 @@ let EnhancedTableToolbar = props => {
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
+  selected: PropTypes.array.isRequired,
+  removePost: PropTypes.func.isRequired,
+  handlePostTableChange: PropTypes.func.isRequired,
 };
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: '85%',
     marginTop: theme.spacing.unit * 3,
   },
   table: {
@@ -245,11 +245,13 @@ class PostList extends Component {
 
   render() {
     const { classes } = this.props;
-    const { posts, order, orderBy, selected, rowsPerPage, page } = this.props;
+    const { posts, order, orderBy, selected, rowsPerPage, page, removePost, handlePostTableChange } = this.props;
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected ? selected.length : 0} />
+        <EnhancedTableToolbar numSelected={selected ? selected.length : 0}
+                              selected={selected} removePost={removePost}
+                              handlePostTableChange ={handlePostTableChange}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <EnhancedTableHead
@@ -328,6 +330,7 @@ function mapDispatchToProps(dispatch) {
   return {
     handlePostTableChange: (source, value) => dispatch(handlePostTableChange({source, value})),
     loadPosts: () => dispatch(loadPosts()),
+    removePost: (post) => dispatch(removePost(post)),
   }
 }
 

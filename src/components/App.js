@@ -17,9 +17,11 @@ class App extends Component {
               <p className="App-intro">
                 Welcome to Readable
               </p>
-              <Dialogs />
-              <CategoryList />
-              <PostList />
+              <Dialogs/>
+              <div align="center">
+                <CategoryList/>
+                <PostList/>
+              </div>
             </div>
           )}/>
 

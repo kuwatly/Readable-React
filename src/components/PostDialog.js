@@ -33,12 +33,12 @@ class PostDialog extends Component {
 
   render() {
     const {
-      title, body, owner, category, id,
+      title, body, author, category, id,
       onRequestClose, open,
       addPost, editPost, handlePostDialogChange,
       currentCategory, categories,
       isEdit, okDisabled,
-      isTitleError, isOwnerError, isBodyError, isCategoryError,
+      isTitleError, isAuthorError, isBodyError, isCategoryError,
     } = this.props;
     const yesButtonColor = okDisabled? "primary": "default";
     const dialogTitle = isEdit? "Edit Post": `Create New ${currentCategory||""} Post`;
@@ -68,11 +68,11 @@ class PostDialog extends Component {
             margin="normal"/>
           <TextField
             required disabled={isEdit} fullWidth
-            error={isOwnerError}
+            error={isAuthorError}
             onChange={(event) =>
-              handlePostDialogChange("owner", event.target.value)}
-            label="Owner"
-            defaultValue={owner}
+              handlePostDialogChange("author", event.target.value)}
+            label="Author"
+            defaultValue={author}
             margin="normal"/>
           <InputLabel
             required disabled={!!currentCategory || isEdit}
@@ -101,7 +101,7 @@ class PostDialog extends Component {
           <IconButton
             disabled={!okDisabled}
             onClick={() => {
-              isEdit ? editPost(id, title, body): addPost({title, body, category, author: owner})
+              isEdit ? editPost(id, title, body): addPost({title, body, category, author})
             }}
             color={yesButtonColor}>
             <YesIcon />
@@ -123,17 +123,17 @@ const isValidCategory = (categories, category, isStrict) => {
 
 function mapStateToProps ({
                             categories: {categories, currentCategory},
-                            dialogs: {title, body, category, owner, isEdit, id}
+                            dialogs: {title, body, category, author, isEdit, id}
                           }) {
   return {
     isEdit,
-    title, body, category, owner, id,
+    title, body, category, author, id,
     currentCategory: currentCategory,
     isTitleError: isError(title),
     isBodyError: isError(body),
     isCategoryError: isError(category) || !isValidCategory(categories, category),
-    isOwnerError: isError(owner),
-    okDisabled: !!title && !!owner &&!!body && isValidCategory(categories, category, true),
+    isOwnerError: isError(author),
+    okDisabled: !!title && !!author &&!!body && isValidCategory(categories, category, true),
     categories: categories,
   }
 }

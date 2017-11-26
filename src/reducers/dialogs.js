@@ -25,7 +25,7 @@ function dialogs(state = initialState, action) {
         openPostDialog: false,
         title: undefined,
         body: undefined,
-        owner: undefined,
+        author: undefined,
         category: undefined
       };
 
@@ -43,7 +43,7 @@ function dialogs(state = initialState, action) {
         openPostDialog: true,
         title,
         body,
-        owner: author,
+        author: author,
         category,
         id
       };
@@ -56,7 +56,7 @@ function dialogs(state = initialState, action) {
         isEdit: false,
         title: undefined,
         body: undefined,
-        owner: undefined,
+        author: undefined,
         category: undefined
       };
 
