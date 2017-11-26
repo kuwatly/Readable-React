@@ -38,7 +38,12 @@ function posts(state = initialPostsState, action) {
     case VOTE_DOWN_POST :
       return {
         ...state,
-        posts: state.posts.filter(post => post.id !== action.post.id).concat(action.post)
+        posts: state.posts.map(post => {
+          if (post.id === action.post.id) {
+            return action.post;
+          }
+          return post;
+        })
       };
 
     case HANDLE_POST_CONTENTS_CHANGE:

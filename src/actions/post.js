@@ -1,7 +1,10 @@
 import {
   apiAddPost,
   apiEditPost,
-  apiDeletePost, apiGetPosts
+  apiDeletePost,
+  apiGetPosts,
+  apiUpVotePost,
+  apiDownVotePost,
 } from "../api/post";
 
 export const LOAD_POSTS = 'LOAD_POSTS';
@@ -45,21 +48,21 @@ export const removePost = (id) => dispatch => (
     }))
 );
 
-export function voteUpPost ({ id, voteScore }) {
-  return {
-    type: VOTE_UP_POST,
-    id,
-    voteScore,
-  }
-}
+export const voteUpPost = (post) => dispatch => (
+  apiUpVotePost(post.id)
+    .then(post => dispatch({
+      type: VOTE_UP_POST,
+      post
+    }))
+);
 
-export function voteDownPost ({ id, voteScore }) {
-  return {
-    type: VOTE_DOWN_POST,
-    id,
-    voteScore,
-  }
-}
+export const voteDownPost = (post) => dispatch => (
+  apiDownVotePost(post.id)
+    .then(post => dispatch({
+      type: VOTE_DOWN_POST,
+      post
+    }))
+);
 
 export const handlePostTableChange = ({source, value}) => ({
   type: HANDLE_POST_TABLE_CHANGE,

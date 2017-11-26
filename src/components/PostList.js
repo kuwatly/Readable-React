@@ -23,9 +23,14 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { timeConverter } from '../utils/utils';
 import PostAdd from './PostAdd';
-import { loadPosts, handlePostTableChange, removePost, handlePostContentsChange } from '../actions/post';
+import {
+  loadPosts, handlePostTableChange, removePost,
+  handlePostContentsChange, voteDownPost, voteUpPost
+} from '../actions/post';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
+import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
+import ExposureNeg1 from 'material-ui-icons/ExposureNeg1';
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -35,6 +40,7 @@ const columnData = [
   { id: 'category', numeric: false, disablePadding: true, label: 'Category' },
   { id: 'commentCount', numeric: true, disablePadding: false, label: 'Comments' },
   { id: 'voteScore', numeric: true, disablePadding: false, label: 'Vote Score' },
+  { id: 'vote', numeric: false, disablePadding: false, label: 'Vote' },
   { id: 'actions', numeric: false, disablePadding: false, label: 'Actions' },
 ];
 
@@ -132,6 +138,7 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title="Delete">
+            voteDownPost
             <IconButton aria-label="Delete" onClick={() => {
               selected.forEach(removePost);
               handlePostTableChange("numSelected", 0);
@@ -172,6 +179,9 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: 'auto',
+  },
+  rightIcon: {
+    marginLeft: 10,
   },
 });
 
@@ -249,7 +259,9 @@ class PostList extends Component {
 
   render() {
     const { classes } = this.props;
-    const { posts, order, orderBy, selected, rowsPerPage, page, removePost, handlePostTableChange } = this.props;
+    const { posts, order, orderBy, selected,
+      rowsPerPage, page, removePost,
+      handlePostTableChange, voteUpPost, voteDownPost } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -291,10 +303,19 @@ class PostList extends Component {
                     <TableCell numeric>{n.commentCount}</TableCell>
                     <TableCell numeric>{n.voteScore}</TableCell>
                     <TableCell padding="none">
+                      <Button color="primary" onClick={() => voteUpPost(n)}>
+                        <ExposurePlus1/>
+                      </Button>
+                      <Button color="primary" onClick={() => voteDownPost(n)}>
+                        <ExposureNeg1/>
+                      </Button>
+                    </TableCell>
+                    <TableCell padding="none">
                       <Button className={classes.button} raised color="primary">
                         View Details
                         <Send className={classes.rightIcon}/>
                       </Button>
+
                     </TableCell>
                   </TableRow>
                 );
@@ -343,6 +364,8 @@ function mapDispatchToProps(dispatch) {
     handlePostContentsChange: (posts) => dispatch(handlePostContentsChange(posts)),
     loadPosts: () => dispatch(loadPosts()),
     removePost: (post) => dispatch(removePost(post)),
+    voteDownPost : (post) => dispatch(voteDownPost(post)),
+    voteUpPost: (post) => dispatch(voteUpPost(post)),
   }
 }
 
