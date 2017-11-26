@@ -21,9 +21,11 @@ import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
-import { timeConverter } from '../utils/utils'
+import { timeConverter } from '../utils/utils';
 import PostAdd from './PostAdd';
-import { loadPosts, handlePostTableChange, removePost } from '../actions/post'
+import { loadPosts, handlePostTableChange, removePost, handlePostContentsChange } from '../actions/post';
+import Button from 'material-ui/Button';
+import Send from 'material-ui-icons/Send';
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -31,7 +33,9 @@ const columnData = [
   { id: 'body', numeric: false, disablePadding: true, label: 'Body' },
   { id: 'author', numeric: false, disablePadding: true, label: 'Author' },
   { id: 'category', numeric: false, disablePadding: true, label: 'Category' },
+  { id: 'commentCount', numeric: true, disablePadding: false, label: 'Comments' },
   { id: 'voteScore', numeric: true, disablePadding: false, label: 'Vote Score' },
+  { id: 'actions', numeric: false, disablePadding: false, label: 'Actions' },
 ];
 
 class EnhancedTableHead extends Component {
@@ -177,7 +181,7 @@ class PostList extends Component {
   }
 
   handleRequestSort = (event, property) => {
-    const { handlePostTableChange } = this.props;
+    const { handlePostTableChange, handlePostContentsChange } = this.props;
     const orderBy = property;
     let order = 'desc';
 
@@ -190,7 +194,7 @@ class PostList extends Component {
         ? this.props.posts.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
         : this.props.posts.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
-    handlePostTableChange("posts", posts);
+    handlePostContentsChange(posts);
     handlePostTableChange("order", order);
     handlePostTableChange("orderBy", orderBy);
   };
@@ -268,15 +272,15 @@ class PostList extends Component {
                 return (
                   <TableRow
                     hover
-                    onClick={event => this.handleClick(event, n.id)}
-                    onKeyDown={event => this.handleKeyDown(event, n.id)}
                     role="checkbox"
                     aria-checked={isSelected}
                     tabIndex={-1}
                     key={n.id}
                     selected={isSelected}
                   >
-                    <TableCell padding="checkbox">
+                    <TableCell padding="checkbox"
+                               onClick={event => this.handleClick(event, n.id)}
+                               onKeyDown={event => this.handleKeyDown(event, n.id)}>
                       <Checkbox checked={isSelected} />
                     </TableCell>
                     <TableCell padding="none">{timeConverter(n.timestamp)}</TableCell>
@@ -284,7 +288,14 @@ class PostList extends Component {
                     <TableCell padding="none">{n.body}</TableCell>
                     <TableCell padding="none">{n.author}</TableCell>
                     <TableCell padding="none">{n.category}</TableCell>
+                    <TableCell numeric>{n.commentCount}</TableCell>
                     <TableCell numeric>{n.voteScore}</TableCell>
+                    <TableCell padding="none">
+                      <Button className={classes.button} raised color="primary">
+                        View Details
+                        <Send className={classes.rightIcon}/>
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -317,7 +328,7 @@ function mapStateToProps({
                            tables: {order, orderBy, selected, page, rowsPerPage},
                          }) {
   return {
-    posts: posts.sort((a, b) => (a.voteScore < b.voteScore ? 1 : -1)),
+    posts: posts,
     order: order,
     orderBy: orderBy,
     selected: selected,
@@ -329,6 +340,7 @@ function mapStateToProps({
 function mapDispatchToProps(dispatch) {
   return {
     handlePostTableChange: (source, value) => dispatch(handlePostTableChange({source, value})),
+    handlePostContentsChange: (posts) => dispatch(handlePostContentsChange(posts)),
     loadPosts: () => dispatch(loadPosts()),
     removePost: (post) => dispatch(removePost(post)),
   }

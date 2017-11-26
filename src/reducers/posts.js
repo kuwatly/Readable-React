@@ -5,6 +5,7 @@ import {
   REMOVE_POST,
   VOTE_UP_POST,
   VOTE_DOWN_POST,
+  HANDLE_POST_CONTENTS_CHANGE,
 } from '../actions/post'
 
 
@@ -39,6 +40,9 @@ function posts(state = initialPostsState, action) {
         ...state,
         posts: state.posts.filter(post => post.id !== action.post.id).concat(action.post)
       };
+
+    case HANDLE_POST_CONTENTS_CHANGE:
+      return {posts: action.posts};
 
     default:
       return state;
