@@ -33,6 +33,7 @@ import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 import ExposureNeg1 from 'material-ui-icons/ExposureNeg1';
+import { Link } from 'react-router-dom';
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -329,11 +330,12 @@ class PostList extends Component {
                       </Button>
                     </TableCell>
                     <TableCell padding="none">
-                      <Button className={classes.button} raised color="primary">
-                        View Details
-                        <Send className={classes.rightIcon}/>
-                      </Button>
-
+                      <Link to={`/${n.category}/${n.id}`} style={{textDecoration: 'none'}}>
+                        <Button className={classes.button} raised color="primary">
+                          View Details
+                          <Send className={classes.rightIcon}/>
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 );
