@@ -11,12 +11,15 @@ import { fetchPostDetails } from '../actions/post'
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
 import {
-  voteDownPost, voteUpPost,
+  voteDownPost, voteUpPost, removePost
 } from '../actions/post';
+import { openEditPostDialog } from '../actions/dailog';
+import { fetchCategories } from '../actions/category';
+import { timeConverter } from '../utils/utils';
 
 const styles = {
   card: {
-    maxWidth: 450,
+    maxWidth: 480,
     Height: 100,
     padding: 30
   },
@@ -32,15 +35,17 @@ const styles = {
 
 class PostItem extends Component {
   componentDidMount() {
-    const { currentPostID, fetchPostDetails } = this.props;
+    const { currentPostID, fetchPostDetails, fetchCategories } = this.props;
     fetchPostDetails(currentPostID);
+    fetchCategories();
   }
 
   render() {
-    const {currentCategory, currentPostID,post} = this.props;
+    const {currentCategory, post, openEditPostDialog,
+      voteUpPost, voteDownPost, removePost } = this.props;
     const image = `../images/${currentCategory}.svg`;
     const classes = this.props.classes;
-    return (
+    const postContents = post && (
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -48,8 +53,8 @@ class PostItem extends Component {
               Post
             </Avatar>
           }
-          title = {`${post && post.title} - ${post && post.author}`}
-          subheader = {post && post.body}
+          title = {`${post.title} - ${post.author}`}
+          subheader = {`${post.body} - ${timeConverter(post.timestamp)}`}
         />
         <CardContent>
           <Grid container spacing={24}>
@@ -57,10 +62,10 @@ class PostItem extends Component {
               <Typography type="body1">{currentCategory}</Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography type="body1">Vote Score: {post && post.voteScore}</Typography>
+              <Typography type="body1">Vote Score: {post.voteScore}</Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography type="body1">Comments: {post && post.commentCount}</Typography>
+              <Typography type="body1">Comments: {post.commentCount}</Typography>
             </Grid>
           </Grid>
         </CardContent>
@@ -82,10 +87,10 @@ class PostItem extends Component {
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button dense color="primary">
+              <Button dense color="primary" onClick={() => openEditPostDialog(post)}>
                 Edit
               </Button>
-              <Button dense color="primary">
+              <Button dense color="primary" onClick={() => removePost(post.id)}>
                 Delete
               </Button>
             </Grid>
@@ -93,6 +98,7 @@ class PostItem extends Component {
         </CardActions>
       </Card>
     );
+    return postContents;
   }
 }
 
@@ -109,6 +115,9 @@ function mapDispatchToProps(dispatch) {
     fetchPostDetails: (id) => dispatch(fetchPostDetails(id)),
     voteDownPost : (post) => dispatch(voteDownPost(post)),
     voteUpPost: (post) => dispatch(voteUpPost(post)),
+    openEditPostDialog: (post) => dispatch(openEditPostDialog(post)),
+    fetchCategories: () => dispatch(fetchCategories()),
+    removePost: (id) => dispatch(removePost(id))
   }
 }
 

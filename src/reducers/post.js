@@ -15,8 +15,10 @@ function post(state = initialPostState, action) {
       return {
         post: action.post
       };
+
     case REMOVE_POST:
       return initialPostState;
+
     default:
       return state;
   }
@@ -24,5 +26,6 @@ function post(state = initialPostState, action) {
 
 const initialPostState = {
   post: null
-}
+};
+
 export default post;

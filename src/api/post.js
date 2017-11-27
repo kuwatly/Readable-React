@@ -25,12 +25,14 @@ export const apiGetPostDetails = (id) =>
   fetch(`${API}/posts/${id}`, {headers})
     .then(res => res.json());
 
-export const apiEditPost = (id, post) =>
+export const apiEditPost = ({id, title, body}) =>
   fetch(`${API}/posts/${id}`, {
     method: 'PUT',
     headers: headers,
     body: JSON.stringify({
-      ...post
+      title,
+      body,
+      timestamp: Date.now()
     })
   }).then(res => res.json());
 

@@ -4,9 +4,9 @@ export const timeConverter = (timestamp) => {
   const year = a.getFullYear();
   const month = months[a.getMonth()];
   const date = a.getDate();
-  const hour = a.getHours();
-  const min = a.getMinutes();
-  const sec = a.getSeconds();
-  const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  const hour = ('0'+a.getHours()).slice(-2);
+  const min = ('0'+a.getMinutes()).slice(-2);
+  const sec = ('0'+a.getSeconds()).slice(-2);
+  const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
   return time;
 };

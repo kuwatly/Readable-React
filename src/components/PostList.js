@@ -167,7 +167,7 @@ EnhancedTableToolbar.propTypes = {
   selected: PropTypes.array.isRequired,
   removePost: PropTypes.func.isRequired,
   handlePostTableChange: PropTypes.func.isRequired,
-  tableTitle: PropTypes.object.isRequired,
+  tableTitle: PropTypes.string.isRequired,
 };
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);

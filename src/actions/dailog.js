@@ -16,3 +16,8 @@ export const handlePostDialogChange = ({source, value}) => ({
   source,
   value
 });
+
+export const openEditPostDialog = (post) => ({
+  type: OPEN_EDIT_POST_DIALOG,
+  post
+});
