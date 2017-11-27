@@ -6,12 +6,14 @@ import posts from './posts';
 import post from './post';
 import dialogs from './dialogs';
 import tables from './tables';
+import commentDialog from './commentDialog';
 
 export default combineReducers({
   categories,
   posts,
   post,
   dialogs,
+  commentDialog,
   tables,
   comment,
 });

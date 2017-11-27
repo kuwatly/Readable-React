@@ -2,7 +2,7 @@ import {API, headers, UP_VOTE_OPTION, DOWN_VOTE_OPTION} from './readableAPI'
 import uuid from 'uuid';
 
 export const apiGetCommentsForPost = (postId) =>
-  fetch(`${API}/comments/${postId}/comments`, {headers})
+  fetch(`${API}/posts/${postId}/comments`, {headers})
     .then(res => res.json());
 
 export const apiAddComment = (comment) =>

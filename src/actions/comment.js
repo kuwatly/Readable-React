@@ -1,61 +1,66 @@
-export const STATE_COMMENTS = 'comments';
-export const LOAD_COMMENTS = 'LOAD_COMMENTS'
-export const ADD_COMMENT = 'ADD_COMMENT'
-export const EDIT_COMMENT = 'EDIT_COMMENT'
-export const REMOVE_COMMENT = 'REMOVE_COMMENT'
-export const VOTE_UP_COMMENT = 'VOTE_UP_COMMENT'
-export const VOTE_DOWN_COMMENT = 'VOTE_DOWN_COMMENT'
+import { apiGetCommentsForPost, apiAddComment,
+  apiDeleteComment, apiEditComment, apiUpVoteComment, apiDownVoteComment
+} from '../api/comment'
 
-export function loadComments({ comments }) {
-  return {
-    type: LOAD_COMMENTS,
-    comments,
-  }
-}
+export const LOAD_COMMENTS = 'LOAD_COMMENTS';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const EDIT_COMMENT = 'EDIT_COMMENT';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
+export const VOTE_UP_COMMENT = 'VOTE_UP_COMMENT';
+export const VOTE_DOWN_COMMENT = 'VOTE_DOWN_COMMENT';
+export const HANDLE_COMMENT_CONTENTS_CHANGE = 'HANDLE_COMMENT_CONTENTS_CHANGE';
 
-export function addComment ({ id, parentId, timestamp, body, author, voteScore, deleted, parentDeleted}) {
-  return {
-    type: ADD_COMMENT,
-    id,
-    parentId,
-    timestamp,
-    body,
-    author,
-    voteScore,
-    deleted,
-    parentDeleted,
-  }
-}
+export const loadComments = (id) => dispatch => (
+  apiGetCommentsForPost(id)
+    .then(comments => dispatch({
+      type: LOAD_COMMENTS,
+      id,
+      comments
+    }))
+);
 
-export function editComment ({ id, body }) {
-  return {
-    type: EDIT_COMMENT,
-    id,
-    body,
-  }
-}
+export const createNewComment = (comment) => dispatch => (
+  apiAddComment(comment)
+    .then(newComment => dispatch({
+      type: ADD_COMMENT,
+      comment: newComment
+    }))
+);
 
-export function removeComment ({ id, deleted, parentDeleted }) {
-  return {
-    type: REMOVE_COMMENT,
-    id,
-    deleted,
-    parentDeleted,
-  }
-}
+export const deleteExistingComment = (id, postId) => dispatch => (
+  apiDeleteComment(id)
+    .then(() => dispatch({
+      type: REMOVE_COMMENT,
+      id,
+      postId
+    }))
+);
 
-export function voteUpComment ({ id, voteScore }) {
-  return {
-    type: VOTE_UP_COMMENT,
-    id,
-    voteScore,
-  }
-}
+export const editExistingComment = (id, body) => dispatch => (
+  apiEditComment(id, body)
+    .then(comment => dispatch({
+      type: EDIT_COMMENT,
+      comment
+    }))
+);
 
-export function voteDownComment ({ id, voteScore }) {
-  return {
-    type: VOTE_DOWN_COMMENT,
-    id,
-    voteScore,
-  }
-}
+export const voteUpComment = (comment) => dispatch => (
+  apiUpVoteComment(comment.id)
+    .then(comment => dispatch({
+      type: VOTE_UP_COMMENT,
+      comment
+    }))
+);
+
+export const voteDownComment = (comment) => dispatch => (
+  apiDownVoteComment(comment.id)
+    .then(comment => dispatch({
+      type: VOTE_DOWN_COMMENT,
+      comment
+    }))
+);
+
+export const handleCommentContentsChange = (posts) => ({
+  type: HANDLE_COMMENT_CONTENTS_CHANGE,
+  posts
+});
