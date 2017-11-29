@@ -19,7 +19,7 @@ import { handleCommentDialogChange, } from '../actions/dailog'
 class CommentDialog extends Component {
   render() {
     const {
-      open, onRequestClose, isYesAcive: isYesActive = false,
+      open, onRequestClose, isYesActive: isYesActive = false,
       body, author, parentId, id,
       isEdit,
       handleCommentDialogChange,
@@ -71,7 +71,7 @@ class CommentDialog extends Component {
   }
 }
 
-function mapStateToProps ({commentDialog: {id, body, author, isEdit}, postDetail: { post }}) {
+function mapStateToProps ({commentDialog: {id, body, author, isEdit}, post: { post }}) {
   return {
     isEdit,
     id, body, author, parentId: post? post.id: null,

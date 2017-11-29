@@ -3,9 +3,10 @@ import {
   CLOSE_COMMENT_DIALOG,
   HANDLE_COMMENT_DIALOG_CHANGE,
   OPEN_EDIT_COMMENT_DIALOG,
-  CREATE_COMMENT,
-  EDIT_COMMENT
 } from '../actions/dailog';
+import {
+  ADD_COMMENT, EDIT_COMMENT
+} from "../actions/comment";
 
 function commentDialog(state = initialCommentDialogState, action){
   switch (action.type) {
@@ -25,7 +26,7 @@ function commentDialog(state = initialCommentDialogState, action){
       };
 
     case CLOSE_COMMENT_DIALOG:
-    case CREATE_COMMENT:
+    case ADD_COMMENT:
     case EDIT_COMMENT:
       return {
         ...state,

@@ -10,7 +10,7 @@ import {
   EDIT_POST,
 } from '../actions/post';
 
-function dialogs(state = initialState, action) {
+function postDialog(state = initialState, action) {
   switch (action.type) {
     case OPEN_POST_DIALOG:
       return {
@@ -70,4 +70,4 @@ const initialState = {
   openPostDialog: false
 };
 
-export default dialogs;
+export default postDialog;

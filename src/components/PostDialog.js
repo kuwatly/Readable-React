@@ -123,7 +123,7 @@ const isValidCategory = (categories, category, isStrict) => {
 
 function mapStateToProps ({
                             categories: {categories, currentCategory},
-                            dialogs: {title, body, category, author, isEdit, id}
+                            postDialog: {title, body, category, author, isEdit, id}
                           }) {
   return {
     isEdit,

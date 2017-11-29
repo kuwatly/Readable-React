@@ -4,7 +4,7 @@ import categories from './categories';
 import comment from './comment';
 import posts from './posts';
 import post from './post';
-import dialogs from './dialogs';
+import postDialog from './postDialog';
 import tables from './tables';
 import commentDialog from './commentDialog';
 
@@ -12,7 +12,7 @@ export default combineReducers({
   categories,
   posts,
   post,
-  dialogs,
+  postDialog,
   commentDialog,
   tables,
   comment,
