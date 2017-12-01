@@ -24,10 +24,11 @@ import FilterListIcon from 'material-ui-icons/FilterList';
 import { timeConverter } from '../utils/utils';
 import PostAdd from './PostAdd';
 import {
-  loadPosts, handlePostTableChange, removePost,
+  loadPosts, removePost,
   handlePostContentsChange, voteDownPost, voteUpPost,
   fetchPostsByCategory,
 } from '../actions/post';
+import { handleTableChange } from '../actions/table'
 import { fetchCategories } from '../actions/category';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
@@ -122,7 +123,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, selected, removePost, handlePostTableChange, tableTitle } = props;
+  const { numSelected, classes, selected, removePost, handleTableChange, tableTitle } = props;
 
   return (
     <Toolbar
@@ -143,8 +144,8 @@ let EnhancedTableToolbar = props => {
           <Tooltip title="Delete">
             <IconButton aria-label="Delete" onClick={() => {
               selected.forEach(removePost);
-              handlePostTableChange("numSelected", 0);
-              handlePostTableChange("selected", []);
+              handleTableChange("numSelected", 0);
+              handleTableChange("selected", []);
             }}>
               <DeleteIcon />
             </IconButton>
@@ -166,7 +167,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   selected: PropTypes.array.isRequired,
   removePost: PropTypes.func.isRequired,
-  handlePostTableChange: PropTypes.func.isRequired,
+  handleTableChange: PropTypes.func.isRequired,
   tableTitle: PropTypes.string.isRequired,
 };
 
@@ -205,7 +206,7 @@ class PostList extends Component {
   }
 
   handleRequestSort = (event, property) => {
-    const { handlePostTableChange, handlePostContentsChange } = this.props;
+    const { handleTableChange, handlePostContentsChange } = this.props;
     const orderBy = property;
     let order = 'desc';
 
@@ -219,17 +220,17 @@ class PostList extends Component {
         : this.props.posts.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
     handlePostContentsChange(posts);
-    handlePostTableChange("order", order);
-    handlePostTableChange("orderBy", orderBy);
+    handleTableChange("order", order);
+    handleTableChange("orderBy", orderBy);
   };
 
   handleSelectAllClick = (event, checked) => {
-    const { handlePostTableChange } = this.props;
+    const { handleTableChange } = this.props;
     if (checked) {
-      handlePostTableChange("selected", this.props.posts.map(n => n.id));
+      handleTableChange("selected", this.props.posts.map(n => n.id));
       return;
     }
-    handlePostTableChange("selected", []);
+    handleTableChange("selected", []);
   };
 
   handleKeyDown = (event, id) => {
@@ -239,7 +240,7 @@ class PostList extends Component {
   };
 
   handleClick = (event, id) => {
-    const { handlePostTableChange, selected } = this.props;
+    const { handleTableChange, selected } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -256,17 +257,17 @@ class PostList extends Component {
       );
     }
 
-    handlePostTableChange("selected", newSelected);
+    handleTableChange("selected", newSelected);
   };
 
   handleChangePage = (event, page) => {
-    const { handlePostTableChange } = this.props;
-    handlePostTableChange("page", page);
+    const { handleTableChange } = this.props;
+    handleTableChange("page", page);
   };
 
   handleChangeRowsPerPage = event => {
-    const { handlePostTableChange } = this.props;
-    handlePostTableChange("rowsPerPage", event.target.value);
+    const { handleTableChange } = this.props;
+    handleTableChange("rowsPerPage", event.target.value);
   };
 
   isSelected = id => this.props.selected.indexOf(id) !== -1;
@@ -275,7 +276,7 @@ class PostList extends Component {
     const { classes } = this.props;
     const { posts, order, orderBy, selected,
       rowsPerPage, page, removePost,
-      handlePostTableChange, voteUpPost, voteDownPost, currentCategory } = this.props;
+      handleTableChange, voteUpPost, voteDownPost, currentCategory } = this.props;
     let tableTitle = "All Posts";
     if (currentCategory) {
       tableTitle = currentCategory.toUpperCase();
@@ -285,7 +286,7 @@ class PostList extends Component {
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected ? selected.length : 0}
                               selected={selected} removePost={removePost}
-                              handlePostTableChange ={handlePostTableChange}
+                              handleTableChange ={handleTableChange}
                               tableTitle = {tableTitle}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
@@ -380,7 +381,6 @@ function mapStateToProps({
 
 function mapDispatchToProps(dispatch) {
   return {
-    handlePostTableChange: (source, value) => dispatch(handlePostTableChange({source, value})),
     handlePostContentsChange: (posts) => dispatch(handlePostContentsChange(posts)),
     loadPosts: () => dispatch(loadPosts()),
     removePost: (post) => dispatch(removePost(post)),
@@ -388,6 +388,7 @@ function mapDispatchToProps(dispatch) {
     voteUpPost: (post) => dispatch(voteUpPost(post)),
     fetchCategories: (category) => dispatch(fetchCategories(category)),
     fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category)),
+    handleTableChange: (source, value) => dispatch(handleTableChange({source, value})),
   }
 }
 

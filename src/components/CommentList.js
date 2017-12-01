@@ -26,7 +26,7 @@ import {
   deleteExistingComment, handleCommentContentsChange, voteDownComment,
   voteUpComment, loadComments,
 } from '../actions/comment';
-import { handlePostTableChange, } from '../actions/post';
+import { handleTableChange, } from '../actions/table';
 import Button from 'material-ui/Button';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 import ExposureNeg1 from 'material-ui-icons/ExposureNeg1';
@@ -117,7 +117,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, selected, removeComment, handlePostTableChange, tableTitle } = props;
+  const { numSelected, classes, selected, removeComment, handleTableChange, tableTitle } = props;
 
   return (
     <Toolbar
@@ -138,8 +138,8 @@ let EnhancedTableToolbar = props => {
           <Tooltip title="Delete">
             <IconButton aria-label="Delete" onClick={() => {
               selected.forEach(removeComment);
-              handlePostTableChange("numSelected", 0);
-              handlePostTableChange("selected", []);
+              handleTableChange("numSelected", 0);
+              handleTableChange("selected", []);
             }}>
               <DeleteIcon />
             </IconButton>
@@ -161,7 +161,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   selected: PropTypes.array.isRequired,
   removeComment: PropTypes.func.isRequired,
-  handlePostTableChange: PropTypes.func.isRequired,
+  handleTableChange: PropTypes.func.isRequired,
   tableTitle: PropTypes.string.isRequired,
 };
 
@@ -185,12 +185,12 @@ const styles = theme => ({
 
 class CommentList extends Component {
   componentDidMount() {
-    const { post_id, loadComments } = this.props;
-    loadComments(post_id);
+    const { currentPostID, loadComments } = this.props;
+    loadComments(currentPostID);
   }
 
   handleRequestSort = (event, property) => {
-    const { handlePostTableChange, handleCommentContentsChange } = this.props;
+    const { handleTableChange, handleCommentContentsChange } = this.props;
     const orderBy = property;
     let order = 'desc';
 
@@ -204,17 +204,17 @@ class CommentList extends Component {
         : this.props.comments.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
     handleCommentContentsChange(comments);
-    handlePostTableChange("order", order);
-    handlePostTableChange("orderBy", orderBy);
+    handleTableChange("order", order);
+    handleTableChange("orderBy", orderBy);
   };
 
   handleSelectAllClick = (event, checked) => {
-    const { handlePostTableChange } = this.props;
+    const { handleTableChange } = this.props;
     if (checked) {
-      handlePostTableChange("selected", this.props.posts.map(n => n.id));
+      handleTableChange("selected", this.props.posts.map(n => n.id));
       return;
     }
-    handlePostTableChange("selected", []);
+    handleTableChange("selected", []);
   };
 
   handleKeyDown = (event, id) => {
@@ -224,7 +224,7 @@ class CommentList extends Component {
   };
 
   handleClick = (event, id) => {
-    const { handlePostTableChange, selected } = this.props;
+    const { handleTableChange, selected } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -241,17 +241,17 @@ class CommentList extends Component {
       );
     }
 
-    handlePostTableChange("selected", newSelected);
+    handleTableChange("selected", newSelected);
   };
 
   handleChangePage = (event, page) => {
-    const { handlePostTableChange } = this.props;
-    handlePostTableChange("page", page);
+    const { handleTableChange } = this.props;
+    handleTableChange("page", page);
   };
 
   handleChangeRowsPerPage = event => {
-    const { handlePostTableChange } = this.props;
-    handlePostTableChange("rowsPerPage", event.target.value);
+    const { handleTableChange } = this.props;
+    handleTableChange("rowsPerPage", event.target.value);
   };
 
   isSelected = id => this.props.selected.indexOf(id) !== -1;
@@ -260,14 +260,14 @@ class CommentList extends Component {
     const { classes } = this.props;
     const { comments, order, orderBy, selected,
       rowsPerPage, page, openEditCommentDialog, deleteExistingComment,
-      handlePostTableChange, voteUpPost, voteDownPost } = this.props;
+      handleTableChange, voteUpComment, voteDownComment } = this.props;
     let tableTitle = "";
 
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected ? selected.length : 0}
                               selected={selected} removeComment={deleteExistingComment}
-                              handlePostTableChange ={handlePostTableChange}
+                              handleTableChange ={handleTableChange}
                               tableTitle = {tableTitle}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
@@ -297,17 +297,14 @@ class CommentList extends Component {
                       <Checkbox checked={isSelected} />
                     </TableCell>
                     <TableCell padding="none">{timeConverter(n.timestamp)}</TableCell>
-                    <TableCell padding="none">{n.title}</TableCell>
                     <TableCell padding="none">{n.body}</TableCell>
                     <TableCell padding="none">{n.author}</TableCell>
-                    <TableCell padding="none">{n.category}</TableCell>
-                    <TableCell numeric>{n.commentCount}</TableCell>
                     <TableCell numeric>{n.voteScore}</TableCell>
                     <TableCell padding="none">
-                      <Button color="primary" onClick={() => voteUpPost(n)}>
+                      <Button color="primary" onClick={() => voteUpComment(n)}>
                         <ExposurePlus1/>
                       </Button>
-                      <Button color="primary" onClick={() => voteDownPost(n)}>
+                      <Button color="primary" onClick={() => voteDownComment(n)}>
                         <ExposureNeg1/>
                       </Button>
                     </TableCell>
@@ -347,7 +344,7 @@ CommentList.propTypes = {
 };
 
 function mapStateToProps({
-                           comments,
+                           comments: {comments},
                            tables: {order, orderBy, selected, page, rowsPerPage},
                          }) {
   return {
@@ -362,13 +359,13 @@ function mapStateToProps({
 
 function mapDispatchToProps(dispatch) {
   return {
-    handlePostTableChange: (source, value) => dispatch(handlePostTableChange({source, value})),
     handleCommentContentsChange: (comments) => dispatch(handleCommentContentsChange(comments)),
     deleteExistingComment: (comment) => dispatch(deleteExistingComment(comment)),
     voteDownComment : (comment) => dispatch(voteDownComment(comment)),
     voteUpComment: (comment) => dispatch(voteUpComment(comment)),
     loadComments: (id) => dispatch(loadComments(id)),
     openEditCommentDialog: (comment) => dispatch(openEditCommentDialog(comment)),
+    handleTableChange: (source, value) => dispatch(handleTableChange({source, value})),
   }
 }
 

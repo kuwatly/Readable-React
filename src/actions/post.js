@@ -15,7 +15,6 @@ export const EDIT_POST = 'EDIT_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const VOTE_UP_POST = 'VOTE_UP_POST';
 export const VOTE_DOWN_POST = 'VOTE_DOWN_POST';
-export const HANDLE_POST_TABLE_CHANGE = 'HANDLE_POST_TABLE_CHANGE';
 export const HANDLE_POST_CONTENTS_CHANGE = 'HANDLE_POST_CONTENTS_CHANGE';
 export const LOAD_POSTS_FOR_CATEGORY = 'LOAD_POSTS_FOR_CATEGORY';
 export const LOAD_POST_DETAILS = 'LOAD_POST_DETAILS';
@@ -67,12 +66,6 @@ export const voteDownPost = (post) => dispatch => (
       post
     }))
 );
-
-export const handlePostTableChange = ({source, value}) => ({
-  type: HANDLE_POST_TABLE_CHANGE,
-  source,
-  value
-});
 
 export const handlePostContentsChange = (posts) => ({
   type: HANDLE_POST_CONTENTS_CHANGE,

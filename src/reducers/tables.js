@@ -1,11 +1,11 @@
 import {
-  HANDLE_POST_TABLE_CHANGE,
-} from '../actions/post'
+  HANDLE_TABLE_CHANGE,
+} from '../actions/table'
 
 
 function tables(state = initialTablesState, action) {
   switch(action.type) {
-    case HANDLE_POST_TABLE_CHANGE:
+    case HANDLE_TABLE_CHANGE:
       return {
         ...state,
         [action.source]: action.value

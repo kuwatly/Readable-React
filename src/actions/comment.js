@@ -60,7 +60,7 @@ export const voteDownComment = (comment) => dispatch => (
     }))
 );
 
-export const handleCommentContentsChange = (posts) => ({
+export const handleCommentContentsChange = (comments) => ({
   type: HANDLE_COMMENT_CONTENTS_CHANGE,
-  posts
+  comments
 });

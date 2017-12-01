@@ -20,12 +20,13 @@ export const apiGetCommentDetails = (id) =>
   fetch(`${API}/comments/${id}`, {headers})
     .then(res => res.json());
 
-export const apiEditComment = (id, comment) =>
+export const apiEditComment = (id, body) =>
   fetch(`${API}/comments/${id}`, {
     method: 'PUT',
     headers: headers,
     body: JSON.stringify({
-      ...comment
+      body,
+      timestamp: Date.now()
     })
   }).then(res => res.json());
 
