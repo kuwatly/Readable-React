@@ -206,6 +206,15 @@ class PostList extends Component {
     }
   }
 
+  componentWillUpdate() {
+    const { fetchPostsByCategory, fetchCategories, currentCategory } = this.props;
+    if (currentCategory) {
+      fetchCategories(currentCategory);
+      fetchPostsByCategory(currentCategory);
+    }
+
+  }
+
   handleRequestSort = (event, property) => {
     const { handleTableChange, handlePostContentsChange } = this.props;
     const orderBy = property;

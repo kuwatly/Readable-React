@@ -7,7 +7,7 @@ import PostItem from "./PostItem";
 import CommentList from "./CommentList";
 import { Route, withRouter } from 'react-router-dom';
 import Dialogs from "./Dialogs";
-import PageNotFound from "./PageNotFound";
+import CategoryNavigation from "./CategoryNavigation";
 
 class App extends Component {
   render() {
@@ -29,11 +29,13 @@ class App extends Component {
           )}/>
           <Route exact path="/:category" render={({match: {params: {category}}}) => (
             <div align="center">
+              <CategoryNavigation />
               <CategoryItem category={{name: category, path: category, detailView: true}}/>
               <PostList currentCategory={category}/>
             </div>)}/>
           <Route exact path="/:category/:post_id" render={({match: {params: {category, post_id}}}) => (
             <div align="center">
+              <CategoryNavigation />
               <PostItem currentCategory={category} currentPostID={post_id}/>
               <CommentList currentPostID={post_id}/>
             </div>)}/>
