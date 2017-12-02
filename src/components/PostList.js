@@ -30,6 +30,7 @@ import {
 } from '../actions/post';
 import { handleTableChange } from '../actions/table'
 import { fetchCategories } from '../actions/category';
+import { openEditPostDialog } from '../actions/dailog';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
@@ -276,7 +277,8 @@ class PostList extends Component {
     const { classes } = this.props;
     const { posts, order, orderBy, selected,
       rowsPerPage, page, removePost,
-      handleTableChange, voteUpPost, voteDownPost, currentCategory } = this.props;
+      handleTableChange, voteUpPost, voteDownPost,
+      openEditPostDialog, currentCategory } = this.props;
     let tableTitle = "All Posts";
     if (currentCategory) {
       tableTitle = currentCategory.toUpperCase();
@@ -331,6 +333,12 @@ class PostList extends Component {
                       </Button>
                     </TableCell>
                     <TableCell padding="none">
+                      <Button dense color="primary" onClick={() => openEditPostDialog(n)}>
+                        Edit
+                      </Button>
+                      <Button dense color="primary" onClick={() => removePost(n.id)}>
+                        Delete
+                      </Button>
                       <Link to={`/${n.category}/${n.id}`} style={{textDecoration: 'none'}}>
                         <Button className={classes.button} raised color="primary">
                           View Details
@@ -389,6 +397,7 @@ function mapDispatchToProps(dispatch) {
     fetchCategories: (category) => dispatch(fetchCategories(category)),
     fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category)),
     handleTableChange: (source, value) => dispatch(handleTableChange({source, value})),
+    openEditPostDialog: (post) => dispatch(openEditPostDialog(post)),
   }
 }
 
