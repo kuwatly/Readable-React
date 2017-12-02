@@ -38,8 +38,15 @@ A new browser window should automatically open displaying the app.  If it doesn'
 ![Edit Post](src/screenshots/EditPost.png "edit post")
 ![Edit Comment](src/screenshots/EditComment.png "edit comment")
 
+## API Server
+
+Information about the API server and how to use it can be found in [API README file](api-server/README.md)
+
 ## How to Use the App
 * Posts are divided into three pre defined categories: React, Redux and Udacity
 * Posts table allows for easy sorting by date and time, title, body, author, category, comments and vote
 * Post details allows users to edit or delete a post as well as vote up or down
 * Comments table allows for easy sorting by date and time, body, author and  vote
+
+## License
+Readable is released under the [MIT License](https://opensource.org/licenses/MIT).
