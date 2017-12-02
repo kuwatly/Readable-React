@@ -7,7 +7,7 @@ import Button from 'material-ui/Button';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 import ExposureNeg1 from 'material-ui-icons/ExposureNeg1';
 import Avatar from 'material-ui/Avatar';
-import { fetchPostDetails } from '../actions/post'
+import { fetchPostDetails } from '../actions/post';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
 import {

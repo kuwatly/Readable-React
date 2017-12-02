@@ -32,6 +32,8 @@ import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 import ExposureNeg1 from 'material-ui-icons/ExposureNeg1';
 import CommentAdd from './CommentAdd';
 import { openEditCommentDialog } from '../actions/dailog'
+import { fetchPostDetails } from '../actions/post'
+import PageNotFound from "./PageNotFound";
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -187,6 +189,7 @@ class CommentList extends Component {
   componentDidMount() {
     const { currentPostID, loadComments } = this.props;
     loadComments(currentPostID);
+    fetchPostDetails(currentPostID);
   }
 
   handleRequestSort = (event, property) => {
@@ -260,10 +263,10 @@ class CommentList extends Component {
     const { classes } = this.props;
     const { comments, order, orderBy, selected,
       rowsPerPage, page, openEditCommentDialog, deleteExistingComment,
-      handleTableChange, voteUpComment, voteDownComment } = this.props;
+      handleTableChange, voteUpComment, voteDownComment, post } = this.props;
     let tableTitle = "";
 
-    return (
+    const commentsContents =  (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected ? selected.length : 0}
                               selected={selected} removeComment={deleteExistingComment}
@@ -336,6 +339,8 @@ class CommentList extends Component {
         </div>
       </Paper>
     );
+
+    return post && comments ? commentsContents : (<PageNotFound/>);
   }
 }
 
@@ -346,6 +351,7 @@ CommentList.propTypes = {
 function mapStateToProps({
                            comments: {comments},
                            tables: {order, orderBy, selected, page, rowsPerPage},
+                           post: {post}
                          }) {
   return {
     comments: comments,
@@ -354,6 +360,7 @@ function mapStateToProps({
     selected: selected,
     page: page,
     rowsPerPage: rowsPerPage,
+    post
   }
 }
 
@@ -366,6 +373,7 @@ function mapDispatchToProps(dispatch) {
     loadComments: (id) => dispatch(loadComments(id)),
     openEditCommentDialog: (comment) => dispatch(openEditCommentDialog(comment)),
     handleTableChange: (source, value) => dispatch(handleTableChange({source, value})),
+    fetchPostDetails: (id) => dispatch(fetchPostDetails(id)),
   }
 }
 

@@ -7,6 +7,7 @@ import PostItem from "./PostItem";
 import CommentList from "./CommentList";
 import { Route, withRouter } from 'react-router-dom';
 import Dialogs from "./Dialogs";
+import PageNotFound from "./PageNotFound";
 
 class App extends Component {
   render() {
