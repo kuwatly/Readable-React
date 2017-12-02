@@ -138,12 +138,6 @@ function mapStateToProps ({
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    handlePostDialogChange: (source, value) => dispatch(handlePostDialogChange({source, value})),
-    addPost: (post) => dispatch(addPost(post)),
-    editPost: (id, title, body) => dispatch(editPost({id, title, body}))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostDialog);
+export default connect(mapStateToProps, {
+  handlePostDialogChange, addPost, editPost
+})(PostDialog);

@@ -110,17 +110,8 @@ function mapStateToProps( { post: {post} } ) {
   return { post };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchPostDetails: (id) => dispatch(fetchPostDetails(id)),
-    voteDownPost : (post) => dispatch(voteDownPost(post)),
-    voteUpPost: (post) => dispatch(voteUpPost(post)),
-    openEditPostDialog: (post) => dispatch(openEditPostDialog(post)),
-    fetchCategories: () => dispatch(fetchCategories()),
-    removePost: (id) => dispatch(removePost(id))
-  }
-}
-
 const styledPostItem = withStyles(styles)(PostItem);
 
-export default connect(mapStateToProps, mapDispatchToProps)(styledPostItem);
+export default connect(mapStateToProps, {
+  fetchPostDetails, voteDownPost, voteUpPost, openEditPostDialog, fetchCategories, removePost
+})(styledPostItem);

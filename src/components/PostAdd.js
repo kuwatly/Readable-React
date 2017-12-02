@@ -30,10 +30,4 @@ const fabStyle = {
   position: 'fixed',
 };
 
-function mapDispatchToProps (dispatch) {
-  return {
-    openPostDialog: () => dispatch(openPostDialog())
-  }
-}
-
-export default connect(null, mapDispatchToProps)(PostAdd);
+export default connect(null, { openPostDialog })(PostAdd);

@@ -59,15 +59,9 @@ function mapStateToProps ({categories}) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    fetchCategories: () => dispatch(fetchCategories())
-  }
-}
-
 const styledCategoryNavigation = withStyles(styles)(CategoryNavigation)
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { fetchCategories }
 )(styledCategoryNavigation);

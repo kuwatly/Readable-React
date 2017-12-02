@@ -45,15 +45,9 @@ function mapStateToProps ({categories}) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    fetchCategories: () => dispatch(fetchCategories())
-  }
-}
-
 const styledCategoryList = withStyles(styles)(CategoryList)
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { fetchCategories }
 )(styledCategoryList);

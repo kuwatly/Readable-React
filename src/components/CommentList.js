@@ -364,19 +364,9 @@ function mapStateToProps({
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    handleCommentContentsChange: (comments) => dispatch(handleCommentContentsChange(comments)),
-    deleteExistingComment: (comment) => dispatch(deleteExistingComment(comment)),
-    voteDownComment : (comment) => dispatch(voteDownComment(comment)),
-    voteUpComment: (comment) => dispatch(voteUpComment(comment)),
-    loadComments: (id) => dispatch(loadComments(id)),
-    openEditCommentDialog: (comment) => dispatch(openEditCommentDialog(comment)),
-    handleTableChange: (source, value) => dispatch(handleTableChange({source, value})),
-    fetchPostDetails: (id) => dispatch(fetchPostDetails(id)),
-  }
-}
-
 const styledCommentList = withStyles(styles)(CommentList);
 
-export default connect(mapStateToProps, mapDispatchToProps)(styledCommentList);
+export default connect(mapStateToProps, {
+  handleCommentContentsChange, deleteExistingComment, voteDownComment, voteUpComment,
+  loadComments, openEditCommentDialog, handleTableChange, fetchPostDetails
+})(styledCommentList);

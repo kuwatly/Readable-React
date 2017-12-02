@@ -30,10 +30,4 @@ const fabStyle = {
   position: 'fixed',
 };
 
-function mapDispatchToProps (dispatch) {
-  return {
-    openCommentDialog: () => dispatch(openCommentDialog())
-  }
-}
-
-export default connect(null, mapDispatchToProps)(CommentAdd);
+export default connect(null, { openCommentDialog })(CommentAdd);

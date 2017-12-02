@@ -79,12 +79,6 @@ function mapStateToProps ({commentDialog: {id, body, author, isEdit}, post: { po
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    handleCommentDialogChange: (source, value) => dispatch(handleCommentDialogChange({source, value})),
-    createNewComment: (comment) => dispatch(createNewComment(comment)),
-    editExistingComment: (id, body) => dispatch(editExistingComment(id, body))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CommentDialog);
+export default connect(mapStateToProps, {
+  handleCommentDialogChange, createNewComment, editExistingComment
+})(CommentDialog);

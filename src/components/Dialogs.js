@@ -33,11 +33,4 @@ function mapStateToProps({
   return { isPostDialogOpen, isCommentDialogOpen,}
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    closePostDialog: () => dispatch(closePostDialog()),
-    closeCommentDialog: () => dispatch(closeCommentDialog()),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dialogs);
+export default connect(mapStateToProps, { closePostDialog, closeCommentDialog })(Dialogs);

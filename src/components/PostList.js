@@ -396,20 +396,9 @@ function mapStateToProps({
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    handlePostContentsChange: (posts) => dispatch(handlePostContentsChange(posts)),
-    loadPosts: () => dispatch(loadPosts()),
-    removePost: (post) => dispatch(removePost(post)),
-    voteDownPost : (post) => dispatch(voteDownPost(post)),
-    voteUpPost: (post) => dispatch(voteUpPost(post)),
-    fetchCategories: (category) => dispatch(fetchCategories(category)),
-    fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category)),
-    handleTableChange: (source, value) => dispatch(handleTableChange({source, value})),
-    openEditPostDialog: (post) => dispatch(openEditPostDialog(post)),
-  }
-}
-
 const styledPostList = withStyles(styles)(PostList);
 
-export default connect(mapStateToProps, mapDispatchToProps)(styledPostList);
+export default connect(mapStateToProps, {
+  handlePostContentsChange, loadPosts, removePost, voteDownPost, voteUpPost, fetchCategories,
+  fetchPostsByCategory, handleTableChange, openEditPostDialog
+})(styledPostList);
