@@ -34,6 +34,7 @@ import CommentAdd from './CommentAdd';
 import { openEditCommentDialog } from '../actions/dailog'
 import { fetchPostDetails } from '../actions/post'
 import PageNotFound from "./PageNotFound";
+import { openCommentDialog } from '../actions/dailog';
 
 const columnData = [
   { id: 'timestamp', numeric: false, disablePadding: true, label: 'Date and Time' },
@@ -263,7 +264,7 @@ class CommentList extends Component {
     const { classes } = this.props;
     const { comments, order, orderBy, selected,
       rowsPerPage, page, openEditCommentDialog, deleteExistingComment,
-      handleTableChange, voteUpComment, voteDownComment, post } = this.props;
+      handleTableChange, voteUpComment, voteDownComment, post, openCommentDialog } = this.props;
     let tableTitle = "";
 
     const commentsContents =  (
@@ -335,7 +336,7 @@ class CommentList extends Component {
               </TableRow>
             </TableFooter>
           </Table>
-          <CommentAdd />
+          <CommentAdd openCommentDialog={ openCommentDialog }/>
         </div>
       </Paper>
     );
@@ -368,5 +369,5 @@ const styledCommentList = withStyles(styles)(CommentList);
 
 export default connect(mapStateToProps, {
   handleCommentContentsChange, deleteExistingComment, voteDownComment, voteUpComment,
-  loadComments, openEditCommentDialog, handleTableChange, fetchPostDetails
+  loadComments, openEditCommentDialog, handleTableChange, fetchPostDetails, openCommentDialog
 })(styledCommentList);

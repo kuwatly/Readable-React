@@ -1,12 +1,8 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-import { connect } from 'react-redux';
-import { openCommentDialog } from '../actions/dailog';
 
-class CommentAdd extends Component {
-  render() {
-    const { openCommentDialog } = this.props;
+export default function CommentAdd({openCommentDialog}) {
     return (
       <Button
         fab
@@ -16,7 +12,6 @@ class CommentAdd extends Component {
         <AddIcon />
       </Button>
     );
-  }
 }
 
 const fabStyle = {
@@ -29,5 +24,3 @@ const fabStyle = {
   left: 'auto',
   position: 'fixed',
 };
-
-export default connect(null, { openCommentDialog })(CommentAdd);

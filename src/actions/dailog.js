@@ -16,7 +16,7 @@ export const closePostDialog = () => ({
   type: CLOSE_POST_DIALOG
 });
 
-export const handlePostDialogChange = ({source, value}) => ({
+export const handlePostDialogChange = (source, value) => ({
   type: HANDLE_POST_DIALOG_CHANGE,
   source,
   value
@@ -35,7 +35,7 @@ export const closeCommentDialog = () => ({
   type: CLOSE_COMMENT_DIALOG
 });
 
-export const handleCommentDialogChange = ({source, value}) => ({
+export const handleCommentDialogChange = (source, value) => ({
   type: HANDLE_COMMENT_DIALOG_CHANGE,
   source,
   value
